@@ -1,6 +1,7 @@
 package org.stol.vaadinintro.views;
 
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.router.Route;
@@ -22,6 +23,10 @@ public class EmployeesTableView extends VerticalLayout {
         employeeGrid.addColumn(Employee::getId).setHeader("ID");
         employeeGrid.addColumn(Employee::getName).setHeader("NAME");
         employeeGrid.addColumn(Employee::getSurname).setHeader("SURNAME");
+
+        // configure columns additional
+        employeeGrid.getColumns().forEach(col -> col.setAutoWidth(true));
+        employeeGrid.addThemeVariants(GridVariant.LUMO_COLUMN_BORDERS, GridVariant.LUMO_WRAP_CELL_CONTENT);
 
         add(employeeGrid);
     }
