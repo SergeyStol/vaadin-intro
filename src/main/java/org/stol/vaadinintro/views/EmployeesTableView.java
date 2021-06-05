@@ -1,5 +1,6 @@
 package org.stol.vaadinintro.views;
 
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -50,6 +51,19 @@ public class EmployeesTableView extends VerticalLayout {
                 .collect(Collectors.toList()));
         });
 
-        add(textField, employeeGrid);
+        // combobox filter
+        ComboBox<EmployeeFilters> comboBox = new ComboBox<>();
+        add(textField, comboBox, employeeGrid);
+        comboBox.setPlaceholder(EmployeeFilters.Name1.name());
+        comboBox.setItems(EmployeeFilters.values());
+        comboBox.setClearButtonVisible(true);
+        comboBox.addValueChangeListener(e -> {
+            if (comboBox.isEmpty())
+                employeeGrid.setItems(employees);
+            else
+                employeeGrid.setItems(employees.stream().filter(employee ->
+                        employee.getName().matches(".*" + comboBox.getValue() + ".*"))
+                        .collect(Collectors.toList()));
+        });
     }
 }
