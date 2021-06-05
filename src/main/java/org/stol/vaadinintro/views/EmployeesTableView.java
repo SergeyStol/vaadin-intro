@@ -4,19 +4,28 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.page.Push;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Route("/table")
 @Push
 public class EmployeesTableView extends VerticalLayout {
+    Grid<Employee> employeeGrid = new Grid<>(Employee.class);
+
     public EmployeesTableView() {
-        Grid<Employee> employeeGrid = new Grid<>(Employee.class);
         var employee1 = Employee.of(1, "Name1", "Surname1", LocalDate.now());
         var employee2 = Employee.of(2, "Name2", "Surname2", LocalDate.now().plusDays(1));
-        employeeGrid.setItems(List.of(employee1, employee2));
+        var employee3 = Employee.of(3, "Name1", "Surname2", LocalDate.now().plusDays(1));
+        List<Employee> employees = new ArrayList<>();
+        employees.add(employee1);
+        employees.add(employee2);
+        employees.add(employee3);
+        employeeGrid.setItems(employees);
 
         // configure columns
         employeeGrid.removeAllColumns();
@@ -28,6 +37,19 @@ public class EmployeesTableView extends VerticalLayout {
         employeeGrid.getColumns().forEach(col -> col.setAutoWidth(true));
         employeeGrid.addThemeVariants(GridVariant.LUMO_COLUMN_BORDERS, GridVariant.LUMO_WRAP_CELL_CONTENT);
 
-        add(employeeGrid);
+        // filters
+        TextField textField = new TextField("Filter by name");
+        textField.setPlaceholder("Name1");
+        textField.setClearButtonVisible(true);
+        textField.addValueChangeListener(e -> {
+            if (textField.isEmpty())
+                employeeGrid.setItems(employees);
+            else
+                employeeGrid.setItems(employees.stream().filter(employee ->
+                        employee.getName().matches(".*" + textField.getValue() + ".*"))
+                .collect(Collectors.toList()));
+        });
+
+        add(textField, employeeGrid);
     }
 }
