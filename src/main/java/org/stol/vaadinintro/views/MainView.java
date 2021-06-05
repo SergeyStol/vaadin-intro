@@ -39,7 +39,6 @@ public class MainView extends VerticalLayout {
 
     @Scheduled(initialDelay = 1000, fixedDelay = 1000)
     public void changeLabelValue() {
-//        label.setText(String.valueOf(0));  It doesn't work
         getUI().ifPresent(ui -> {
             ui.access(() -> {
                 label.setText(String.valueOf(0));
