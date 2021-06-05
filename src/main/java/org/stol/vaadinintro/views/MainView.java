@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Route("")
 @Theme(variant = Lumo.DARK)
-@Push(PushMode.MANUAL)
+@Push
 public class MainView extends VerticalLayout {
 
     Label label = new Label();
@@ -43,7 +43,6 @@ public class MainView extends VerticalLayout {
         getUI().ifPresent(ui -> {
             ui.access(() -> {
                 label.setText(String.valueOf(0));
-                ui.push();
             });
         });
     }
